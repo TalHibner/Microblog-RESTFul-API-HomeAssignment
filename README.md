@@ -53,7 +53,8 @@ Get request - /post/top
 
 I have been dockerizing the service (REST API and the storage engine) by formatting into a docker-compose YAML file.
 The docker-compose YAML file define the two different docker containers for the REST API and the storage engine.
-run on linux the run.sh script or Run the commands:
+
+run on unix the run.sh script or Run the commands:
 mvn clean install
 docker-compose -f docker-compose.yml up --build --force-recreate -d
 
