@@ -1,0 +1,38 @@
+version: '3.1'
+
+networks: 
+  blog_net: 
+    driver: nat 
+    
+services:
+
+  microblogdb:
+    image: mysql
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin ping --silent"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    ports: 
+      - "3306:3306" 
+    environment:
+      MYSQL_ROOT_PASSWORD: passw0rd
+      MYSQL_DATABASE: microblog
+    networks: 
+      - blog_net     
+  
+  microblog:
+    build:  
+      context: . 
+    image: microblog/server
+    restart: always
+    ports: 
+      - "8080:8080"
+    depends_on:
+      - microblogdb
+    networks: 
+      - blog_net  
